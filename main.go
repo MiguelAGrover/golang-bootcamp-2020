@@ -20,13 +20,14 @@ import (
 )
 
 func main() {
+
+	config.ReadConfig()
+
 	// This is the methods used for the first delivery
 	write()
 	read()
 
 	// From here it begins the clean architecture for the final delivery
-	config.ReadConfig()
-
 	db := datastore.NewDB(config.C.Sqlitedb.DBPath)
 	sqlDB, err := db.DB()
 	if err != nil {
@@ -49,6 +50,7 @@ func main() {
 
 // write Obtain data from an external API convert it to an array and save it into csv file
 func write() {
+	fmt.Println(config.C.Sources.DigimonAPI)
 	resp, err := http.Get(config.C.Sources.DigimonAPI)
 	if err != nil {
 		log.Fatalln(err)
