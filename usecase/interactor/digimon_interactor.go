@@ -15,6 +15,7 @@ type digimonInteractor struct {
 type DigimonInteractor interface {
 	Get(d []*model.Digimon) ([]*model.Digimon, error)
 	Create(d *model.Digimon) (*model.Digimon, error)
+	Update(d *model.Digimon) (*model.Digimon, error)
 }
 
 // NewDigimonInteractor returns a digimon interactor based on the repository and a presenter.
@@ -34,6 +35,12 @@ func (di *digimonInteractor) Get(d []*model.Digimon) ([]*model.Digimon, error) {
 
 func (di *digimonInteractor) Create(d *model.Digimon) (*model.Digimon, error) {
 	d, err := di.DigimonRepository.Create(d)
+
+	return d, err
+}
+
+func (di *digimonInteractor) Update(d *model.Digimon) (*model.Digimon, error) {
+	d, err := di.DigimonRepository.Update(d)
 
 	return d, err
 }

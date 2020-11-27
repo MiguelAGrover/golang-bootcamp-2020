@@ -16,6 +16,7 @@ type digimonController struct {
 type DigimonController interface {
 	GetDigimons(c Context) error
 	CreateDigimon(c Context) error
+	UpdateDigimon(c Context) error
 }
 
 // NewDigimonController This function returns a Digimon controller based on the interactor which catch the request for digimon data
@@ -48,4 +49,19 @@ func (dc *digimonController) CreateDigimon(c Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, d)
+}
+
+func (dc *digimonController) UpdateDigimon(c Context) error {
+	var params model.Digimon
+
+	if err := c.Bind(&params); !errors.Is(err, nil) {
+		return err
+	}
+
+	d, err := dc.digimonInteractor.Update(&params)
+	if !errors.Is(err, nil) {
+		return err
+	}
+
+	return c.JSON(http.StatusAccepted, d)
 }

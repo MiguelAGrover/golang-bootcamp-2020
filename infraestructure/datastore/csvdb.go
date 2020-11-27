@@ -2,6 +2,7 @@ package datastore
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -22,6 +23,7 @@ type CSVDB interface {
 	LoadCSV() ([][]string, error)
 	WriteCSV(rows []string) error
 	WriteFullCSV(rows [][]string) error
+	DropCSVFile() error
 }
 
 type csvDB struct {
@@ -110,4 +112,12 @@ func readCSVFile(csvFile *os.File) [][]string {
 		log.Fatalln(err)
 	}
 	return records
+}
+
+func (c csvDB) DropCSVFile() error {
+	err := os.Remove(c.csvFile)
+	if !errors.Is(err, nil) {
+		return err
+	}
+	return nil
 }

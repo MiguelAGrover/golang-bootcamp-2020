@@ -6,4 +6,5 @@ import "wizegolangapi/domain/model"
 type DigimonRepository interface {
 	FindAll(d []*model.Digimon) ([]*model.Digimon, error)
 	Create(d *model.Digimon) (*model.Digimon, error)
+	Update(d *model.Digimon) (*model.Digimon, error)
 }
