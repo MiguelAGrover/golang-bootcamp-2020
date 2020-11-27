@@ -1,16 +1,14 @@
 package presenter
 
-import "digimons/domain/model"
+import (
+	"wizegolangapi/domain/model"
+	"wizegolangapi/usecase/presenter"
+)
 
 type digimonPresenter struct{}
 
-// DigimonPresenter contain the methods that are called before massing it to the views that refer to Digimons.
-type DigimonPresenter interface {
-	ResponseDigimons(di []*model.Digimon) []*model.Digimon
-}
-
 // NewDigimonPresenter returns a pointer to DigimonPresenter
-func NewDigimonPresenter() DigimonPresenter {
+func NewDigimonPresenter() presenter.DigimonPresenter {
 	return &digimonPresenter{}
 }
 

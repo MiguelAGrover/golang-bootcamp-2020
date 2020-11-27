@@ -1,6 +1,6 @@
 package presenter
 
-import "digimons/domain/model"
+import "wizegolangapi/domain/model"
 
 // DigimonPresenter this is the interface of the methods that digimon presenter should has
 type DigimonPresenter interface {

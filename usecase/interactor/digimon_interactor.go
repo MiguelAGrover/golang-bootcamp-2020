@@ -1,9 +1,9 @@
 package interactor
 
 import (
-	"digimons/domain/model"
-	"digimons/usecase/presenter"
-	"digimons/usecase/repository"
+	"wizegolangapi/domain/model"
+	"wizegolangapi/usecase/presenter"
+	"wizegolangapi/usecase/repository"
 )
 
 type digimonInteractor struct {
@@ -14,6 +14,7 @@ type digimonInteractor struct {
 // DigimonInteractor contain the methods that the interactor should contain
 type DigimonInteractor interface {
 	Get(d []*model.Digimon) ([]*model.Digimon, error)
+	Create(d *model.Digimon) (*model.Digimon, error)
 }
 
 // NewDigimonInteractor returns a digimon interactor based on the repository and a presenter.
@@ -29,4 +30,10 @@ func (di *digimonInteractor) Get(d []*model.Digimon) ([]*model.Digimon, error) {
 	}
 
 	return di.DigimonPresenter.ResponseDigimons(d), nil
+}
+
+func (di *digimonInteractor) Create(d *model.Digimon) (*model.Digimon, error) {
+	d, err := di.DigimonRepository.Create(d)
+
+	return d, err
 }

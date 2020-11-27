@@ -1,13 +1,12 @@
 package registry
 
 import (
-	"digimons/interface/controller"
-
-	"gorm.io/gorm"
+	"wizegolangapi/infraestructure/datastore"
+	"wizegolangapi/interface/controller"
 )
 
 type registry struct {
-	db *gorm.DB
+	db datastore.CSVDB
 }
 
 // Registry contain a pointer to an instance of form DB
@@ -16,7 +15,7 @@ type Registry interface {
 }
 
 // NewRegistry returns a new registry with a pointer to the database.
-func NewRegistry(db *gorm.DB) Registry {
+func NewRegistry(db datastore.CSVDB) Registry {
 	return &registry{db}
 }
 

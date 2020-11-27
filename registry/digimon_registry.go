@@ -1,12 +1,12 @@
 package registry
 
 import (
-	"digimons/interface/controller"
-	ip "digimons/interface/presenter"
-	ir "digimons/interface/repository"
-	"digimons/usecase/interactor"
-	up "digimons/usecase/presenter"
-	ur "digimons/usecase/repository"
+	"wizegolangapi/interface/controller"
+	ip "wizegolangapi/interface/presenter"
+	ir "wizegolangapi/interface/repository"
+	"wizegolangapi/usecase/interactor"
+	up "wizegolangapi/usecase/presenter"
+	ur "wizegolangapi/usecase/repository"
 )
 
 // NewDigimonController Returns a controller with interactor for digimons

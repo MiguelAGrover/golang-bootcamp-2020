@@ -136,8 +136,8 @@ For submitting your work, you should follow these steps:
 ### Todos
 
 - [x] First Delivery
-- [ ] Change config setup to allow csv file names and remove database connections
-- [ ] Consider gormcsv to manipulate the csv.
+- [x] Change config setup to allow csv file names and remove database connections
+- [x] Consider gormcsv to manipulate the csv.
 - [ ] Add more routes to router and it's logic.
 - [ ] Add remaining comments to procedures from the architecture
 - [ ] Add unit testcases

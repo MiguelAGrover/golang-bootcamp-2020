@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -9,13 +8,12 @@ import (
 	"net/http"
 	"os"
 
-	"digimons/config"
-	"digimons/domain/model"
-	"digimons/infraestructure/datastore"
-	"digimons/infraestructure/router"
-	"digimons/registry"
+	"wizegolangapi/config"
+	"wizegolangapi/domain/model"
+	"wizegolangapi/infraestructure/datastore"
+	"wizegolangapi/infraestructure/router"
+	"wizegolangapi/registry"
 
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/labstack/echo"
 )
 
@@ -23,18 +21,19 @@ func main() {
 
 	config.ReadConfig()
 
+	db := datastore.NewCSVDB(config.C.Dest.DigimonCSV)
 	// This is the methods used for the first delivery
-	write()
-	read()
+	write(db)
+	// read(csvdb)
 
 	// From here it begins the clean architecture for the final delivery
-	db := datastore.NewDB(config.C.Sqlitedb.DBPath)
-	sqlDB, err := db.DB()
-	if err != nil {
-		log.Fatalln(err)
-	}
+	// db := datastore.NewDB(config.C.Sqlitedb.DBPath)
+	//sqlDB, err := db.DB()
+	// if err != nil {
+	//  	log.Fatalln(err)
+	// }
 
-	defer sqlDB.Close()
+	// defer sqlDB.Close()
 
 	r := registry.NewRegistry(db)
 
@@ -49,8 +48,7 @@ func main() {
 }
 
 // write Obtain data from an external API convert it to an array and save it into csv file
-func write() {
-	fmt.Println(config.C.Sources.DigimonAPI)
+func write(db datastore.CSVDB) {
 	resp, err := http.Get(config.C.Sources.DigimonAPI)
 	if err != nil {
 		log.Fatalln(err)
@@ -68,38 +66,22 @@ func write() {
 	var DigimonStructArray []model.Digimon
 	json.Unmarshal(bodyBytes, &DigimonStructArray)
 
-	csvFile, err := os.Create(config.C.Dest.DigimonCSV)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer csvFile.Close()
+	var DigimonStringArray [][]string
 
-	writer := csv.NewWriter(csvFile)
 	for _, digimon := range DigimonStructArray {
 		var row []string
 		row = append(row, digimon.Name)
 		row = append(row, digimon.Level)
 		row = append(row, digimon.Image)
-		writer.Write(row)
+		DigimonStringArray = append(DigimonStringArray, row)
 	}
 	// remember to flush!
-	writer.Flush()
+	db.WriteFullCSV(DigimonStringArray)
 }
 
 // read Takes the information from a csv file, convert it to an array of Digimon structure and convert it to json.
-func read() {
-	csvFile, err := os.Open(config.C.Dest.DigimonCSV)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer csvFile.Close()
-	r := csv.NewReader(csvFile)
-	records, err := r.ReadAll()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
+func read(db datastore.CSVDB) {
+	records, err := db.LoadCSV()
 	var digimon model.Digimon
 	var digimons []model.Digimon
 	for _, rec := range records {
