@@ -17,6 +17,7 @@ type DigimonController interface {
 	GetDigimons(c Context) error
 	CreateDigimon(c Context) error
 	UpdateDigimon(c Context) error
+	DeleteDigimon(c Context) error
 }
 
 // NewDigimonController This function returns a Digimon controller based on the interactor which catch the request for digimon data
@@ -59,6 +60,19 @@ func (dc *digimonController) UpdateDigimon(c Context) error {
 	}
 
 	d, err := dc.digimonInteractor.Update(&params)
+	if !errors.Is(err, nil) {
+		return err
+	}
+
+	return c.JSON(http.StatusAccepted, d)
+}
+
+func (dc *digimonController) DeleteDigimon(c Context) error {
+	name := c.Param("name")
+
+	params := model.Digimon{Name: name}
+
+	d, err := dc.digimonInteractor.Delete(&params)
 	if !errors.Is(err, nil) {
 		return err
 	}

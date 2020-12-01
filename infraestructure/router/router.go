@@ -14,7 +14,8 @@ func NewRouter(e *echo.Echo, c controller.AppController) *echo.Echo {
 
 	e.GET("/digimons", func(context echo.Context) error { return c.Digimon.GetDigimons(context) })
 	e.POST("/digimons", func(context echo.Context) error { return c.Digimon.CreateDigimon(context) })
-	e.PATCH("/digimons", func(context echo.Context) error { return c.Digimon.UpdateDigimon(context) })
+	e.PUT("/digimons", func(context echo.Context) error { return c.Digimon.UpdateDigimon(context) })
+	e.DELETE("/digimons/:name", func(context echo.Context) error { return c.Digimon.DeleteDigimon(context) })
 
 	return e
 }
