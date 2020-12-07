@@ -3,14 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 
 	"wizegolangapi/config"
 	"wizegolangapi/domain/model"
 	"wizegolangapi/infraestructure/datastore"
 	"wizegolangapi/infraestructure/router"
+	"wizegolangapi/infraestructure/service"
 	"wizegolangapi/registry"
 
 	"github.com/labstack/echo"
@@ -21,8 +20,9 @@ func main() {
 	config.ReadConfig()
 
 	db := datastore.NewCSVDB(config.C.Dest.DigimonCSV)
+	s := service.NewService(config.C.Sources.DigimonAPI)
 
-	write(db)
+	write(db, s)
 
 	r := registry.NewRegistry(db)
 
@@ -37,24 +37,22 @@ func main() {
 }
 
 // write Obtain data from an external API convert it to an array and save it into csv file
-func write(db datastore.CSVDB) {
+func write(db datastore.CSVDB, s service.Service) {
 	if !db.FileExist() {
-		resp, err := http.Get(config.C.Sources.DigimonAPI)
+		bodyBytes, err := s.GetData()
+
 		if err != nil {
 			log.Fatalln(err)
-		}
-
-		defer resp.Body.Close()
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
-
-		if err != nil {
-			fmt.Println(err)
 		}
 
 		var DigimonStructArray []model.Digimon
 		json.Unmarshal(bodyBytes, &DigimonStructArray)
 
 		var DigimonStringArray [][]string
+
+		labels := []string{"Name", "Level", "Image"}
+
+		DigimonStringArray = append(DigimonStringArray, labels)
 
 		for _, digimon := range DigimonStructArray {
 			var row []string
