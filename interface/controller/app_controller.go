@@ -1,6 +1,6 @@
 package controller
 
-// AppController This contain all the controller interfaces that this software accepts
+// AppController : contain all the controller interfaces allowed
 type AppController struct {
 	Digimon interface{ DigimonController }
 }

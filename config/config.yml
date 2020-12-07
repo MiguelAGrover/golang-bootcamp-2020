@@ -1,9 +1,6 @@
 server:
   address: 8080
 
-sqlitedb: 
-  dbpath: "config/goolang-bootcamp-2020.db"
-
 sources:
   digimonAPI: "https://digimon-api.vercel.app/api/digimon"
 

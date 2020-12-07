@@ -8,4 +8,5 @@ type DigimonRepository interface {
 	Create(d *model.Digimon) (*model.Digimon, error)
 	Update(d *model.Digimon) (*model.Digimon, error)
 	Delete(d *model.Digimon) (*model.Digimon, error)
+	Find(d *model.Digimon) (*model.Digimon, error)
 }

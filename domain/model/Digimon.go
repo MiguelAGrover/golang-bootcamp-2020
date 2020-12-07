@@ -1,6 +1,6 @@
 package model
 
-// Digimon is the structure to contain digimon data.
+// Digimon : This structure contain name, level and image attributes
 type Digimon struct {
 	Name  string `json:"name"`
 	Level string `json:"level"`

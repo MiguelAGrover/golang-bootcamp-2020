@@ -10,13 +10,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-// config structure allow me to store Database information as it was using MySQL for storage of the API
+// config : structure that contain port to be used by server, pages from which data is retrieved and csv paths.
 type config struct {
 	Server struct {
 		Address string
-	}
-	Sqlitedb struct {
-		DBPath string
 	}
 	Sources struct {
 		DigimonAPI string
@@ -26,16 +23,18 @@ type config struct {
 	}
 }
 
-// C an instance of the config structure
+// C : instance of the config structure
 var C config
 
-// ReadConfig loads configuration from config.yml
+// ReadConfig : loads configuration from config.yml and loads it into a config structure.
 func ReadConfig() {
 	Config := &C
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
-	viper.AddConfigPath(filepath.Join("$GOPATH", "src", "github.com", "MiguelAGrover", "golang-bootcamp-2020", "config"))
+	viper.AddConfigPath(filepath.Join("$GOPATH", "src",
+		"github.com", "MiguelAGrover",
+		"golang-bootcamp-2020", "config"))
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
