@@ -138,11 +138,13 @@ For submitting your work, you should follow these steps:
 - [x] First Delivery
 - [x] Change config setup to allow csv file names and remove database connections
 - [x] Consider gormcsv to manipulate the csv.
-- [ ] Add more routes to router and it's logic.
-- [ ] Add remaining comments to procedures from the architecture
+- [x] Add more routes to router and it's logic.
+- [x] Add remaining comments to procedures from the architecture
 - [ ] Add unit testcases
+- [ ] Create logic to support services
+- [ ] Move write to clean architecture
 
 ### Method of running
 
 - go build .
-- run the generated digimons file.
+- ./wizegolangapi.exe or ./wizegolangapi

@@ -21,7 +21,7 @@ func main() {
 	config.ReadConfig()
 
 	db := datastore.NewCSVDB(config.C.Dest.DigimonCSV)
-	// This is the methods used for the first delivery
+
 	write(db)
 
 	r := registry.NewRegistry(db)

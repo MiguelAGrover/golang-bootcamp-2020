@@ -20,7 +20,7 @@ func (e *repositoryError) Error() string {
 		e.What)
 }
 
-// DigimonRepository shows all the methods to be implemented by a digimon repository
+// DigimonRepository : Shows all the methods to be implemented by a digimon repository
 type DigimonRepository interface {
 	FindAll(d []*model.Digimon) ([]*model.Digimon, error)
 	Create(d *model.Digimon) (*model.Digimon, error)
@@ -29,27 +29,38 @@ type DigimonRepository interface {
 	Find(d *model.Digimon) (*model.Digimon, error)
 }
 
-// NewDigimonRepository Returns an instance of a digimon repository
+// NewDigimonRepository : Returns an instance of a digimon repository.
 func NewDigimonRepository(db datastore.CSVDB) DigimonRepository {
 	return &digimonRepository{db}
 }
 
-// FindAll retrieve all the digimons from the database
+// FindAll : Retrieve all the digimons from the database.
 func (dr *digimonRepository) FindAll(d []*model.Digimon) ([]*model.Digimon, error) {
 	data, err := dr.db.LoadCSV()
-
 	if err != nil {
 		return nil, err
 	}
-
-	for _, rec := range data {
-		digimon := model.Digimon{Name: string(rec[0]), Level: string(rec[1]), Image: string(rec[2])}
-		d = append(d, &digimon)
+	var labels []string
+	for index, rec := range data {
+		if index == 0 {
+			labels = rec
+		} else {
+			digimonmap := make(map[string]string)
+			for i, value := range rec {
+				digimonmap[labels[i]] = value
+			}
+			digimon := model.Digimon{
+				Name:  digimonmap["Name"],
+				Level: digimonmap["Level"],
+				Image: digimonmap["Image"]}
+			d = append(d, &digimon)
+		}
 	}
 
 	return d, nil
 }
 
+// Create : Insert a digimon at the end of the csv.
 func (dr *digimonRepository) Create(d *model.Digimon) (*model.Digimon, error) {
 
 	var DigimonString []string
@@ -64,6 +75,7 @@ func (dr *digimonRepository) Create(d *model.Digimon) (*model.Digimon, error) {
 	return d, nil
 }
 
+// Update : Recreate the csv with the update requested.
 func (dr *digimonRepository) Update(d *model.Digimon) (*model.Digimon, error) {
 	data, err := dr.db.LoadCSV()
 
@@ -105,6 +117,7 @@ func (dr *digimonRepository) Update(d *model.Digimon) (*model.Digimon, error) {
 	return d, nil
 }
 
+// Delete : Delete the row of the csv based on the name of the digimon.
 func (dr *digimonRepository) Delete(d *model.Digimon) (*model.Digimon, error) {
 	data, err := dr.db.LoadCSV()
 
@@ -139,6 +152,7 @@ func (dr *digimonRepository) Delete(d *model.Digimon) (*model.Digimon, error) {
 	return d, nil
 }
 
+// Find : Find a Dgigimon on the csv based on the name passed.
 func (dr *digimonRepository) Find(d *model.Digimon) (*model.Digimon, error) {
 	data, err := dr.db.LoadCSV()
 
@@ -148,16 +162,21 @@ func (dr *digimonRepository) Find(d *model.Digimon) (*model.Digimon, error) {
 
 	var digimon *model.Digimon
 
-	for i, rec := range data {
-		if i == 0 {
-			fmt.Println(i)
-		}
-		if d.Name == string(rec[0]) {
-			digimon = new(model.Digimon)
-			digimon.Name = string(rec[0])
-			digimon.Level = string(rec[1])
-			digimon.Image = string(rec[2])
-			break
+	var labels []string
+	for index, rec := range data {
+		if index == 0 {
+			labels = rec
+		} else {
+			digimonmap := make(map[string]string)
+			for i, value := range rec {
+				digimonmap[labels[i]] = value
+			}
+			if digimonmap["Name"] == d.Name {
+				digimon = new(model.Digimon)
+				digimon.Name = digimonmap["Name"]
+				digimon.Level = digimonmap["Level"]
+				digimon.Image = digimonmap["Image"]
+			}
 		}
 	}
 

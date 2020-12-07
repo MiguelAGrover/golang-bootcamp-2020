@@ -4,5 +4,5 @@ package model
 type Digimon struct {
 	Name  string `json:"name"`
 	Level string `json:"level"`
-	Image string `json:"img"`
+	Image string `json:"image"`
 }
