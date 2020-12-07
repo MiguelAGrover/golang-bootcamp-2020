@@ -63,6 +63,11 @@ func (dr *digimonRepository) FindAll(d []*model.Digimon) ([]*model.Digimon, erro
 // Create : Insert a digimon at the end of the csv.
 func (dr *digimonRepository) Create(d *model.Digimon) (*model.Digimon, error) {
 
+	if d == nil {
+		return nil, &repositoryError{
+			"No data was passed on Create",
+		}
+	}
 	var DigimonString []string
 	DigimonString = append(DigimonString, d.Name)
 	DigimonString = append(DigimonString, d.Level)
