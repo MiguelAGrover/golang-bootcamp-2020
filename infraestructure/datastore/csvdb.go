@@ -10,12 +10,13 @@ import (
 )
 
 // MyError : the structure that contain personalized error with information related to read and write to csvs
-type MyError struct {
+type CSVDBError struct {
 	When time.Time
 	What string
 }
 
-func (e *MyError) Error() string {
+// Error will show messages using MyError structure that comes from csvdb.
+func (e *CSVDBError) Error() string {
 	return fmt.Sprintf("%s",
 		e.What)
 }
@@ -40,7 +41,7 @@ func (c csvDB) LoadCSV() ([][]string, error) {
 	defer csvFile.Close()
 	records := c.readCSVFile(csvFile)
 	if len(records) == 0 {
-		return nil, &MyError{
+		return nil, &CSVDBError{
 			time.Now(),
 			"Database is empty",
 		}
@@ -51,7 +52,7 @@ func (c csvDB) LoadCSV() ([][]string, error) {
 // WriteFullCSV : Writes all the data passed as array to the csv
 func (c csvDB) WriteFullCSV(rows [][]string) error {
 	if len(rows) == 0 {
-		return &MyError{
+		return &CSVDBError{
 			time.Now(),
 			"Nothing to write to CSV",
 		}
@@ -69,7 +70,7 @@ func (c csvDB) WriteFullCSV(rows [][]string) error {
 // WriteCSV : Write one row to the csv
 func (c csvDB) WriteCSV(row []string) error {
 	if len(row) == 0 {
-		return &MyError{
+		return &CSVDBError{
 			time.Now(),
 			"Nothing to write to CSV",
 		}
@@ -140,7 +141,7 @@ func (c csvDB) readCSVFile(csvFile *os.File) [][]string {
 func (c csvDB) DropCSVFile() error {
 	err := os.Remove(c.csvFile)
 	if !errors.Is(err, nil) {
-		return &MyError{
+		return &CSVDBError{
 			time.Now(),
 			"CSV not found",
 		}

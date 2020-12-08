@@ -140,9 +140,8 @@ For submitting your work, you should follow these steps:
 - [x] Consider gormcsv to manipulate the csv.
 - [x] Add more routes to router and it's logic.
 - [x] Add remaining comments to procedures from the architecture
-- [ ] Add unit testcases
-- [ ] Create logic to support services
-- [ ] Move write to clean architecture
+- [x] Add unit testcases
+- [x] Create logic to support services
 
 ### Method of running
 

@@ -16,7 +16,6 @@ import (
 )
 
 func main() {
-
 	config.ReadConfig()
 
 	db := datastore.NewCSVDB(config.C.Dest.DigimonCSV)

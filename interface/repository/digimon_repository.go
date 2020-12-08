@@ -15,6 +15,7 @@ type repositoryError struct {
 	What string
 }
 
+// Error will show error using repositoryError structure that comes from digimonRepository usage.
 func (e *repositoryError) Error() string {
 	return fmt.Sprintf("%s",
 		e.What)
@@ -41,20 +42,21 @@ func (dr *digimonRepository) FindAll(d []*model.Digimon) ([]*model.Digimon, erro
 		return nil, err
 	}
 	var labels []string
+	var digimonmap map[string]string
 	for index, rec := range data {
 		if index == 0 {
 			labels = rec
-		} else {
-			digimonmap := make(map[string]string)
-			for i, value := range rec {
-				digimonmap[labels[i]] = value
-			}
-			digimon := model.Digimon{
-				Name:  digimonmap["Name"],
-				Level: digimonmap["Level"],
-				Image: digimonmap["Image"]}
-			d = append(d, &digimon)
+			digimonmap = make(map[string]string)
+			continue
 		}
+		for i, value := range rec {
+			digimonmap[labels[i]] = value
+		}
+		digimon := model.Digimon{
+			Name:  digimonmap["Name"],
+			Level: digimonmap["Level"],
+			Image: digimonmap["Image"]}
+		d = append(d, &digimon)
 	}
 
 	return d, nil
@@ -62,7 +64,6 @@ func (dr *digimonRepository) FindAll(d []*model.Digimon) ([]*model.Digimon, erro
 
 // Create : Insert a digimon at the end of the csv.
 func (dr *digimonRepository) Create(d *model.Digimon) (*model.Digimon, error) {
-
 	if d == nil {
 		return nil, &repositoryError{
 			"No data was passed on Create",
@@ -166,22 +167,22 @@ func (dr *digimonRepository) Find(d *model.Digimon) (*model.Digimon, error) {
 	}
 
 	var digimon *model.Digimon
-
+	var digimonmap map[string]string
 	var labels []string
 	for index, rec := range data {
 		if index == 0 {
 			labels = rec
-		} else {
-			digimonmap := make(map[string]string)
-			for i, value := range rec {
-				digimonmap[labels[i]] = value
-			}
-			if digimonmap["Name"] == d.Name {
-				digimon = new(model.Digimon)
-				digimon.Name = digimonmap["Name"]
-				digimon.Level = digimonmap["Level"]
-				digimon.Image = digimonmap["Image"]
-			}
+			digimonmap = make(map[string]string)
+			continue
+		}
+		for i, value := range rec {
+			digimonmap[labels[i]] = value
+		}
+		if digimonmap["Name"] == d.Name {
+			digimon = new(model.Digimon)
+			digimon.Name = digimonmap["Name"]
+			digimon.Level = digimonmap["Level"]
+			digimon.Image = digimonmap["Image"]
 		}
 	}
 
