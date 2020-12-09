@@ -3,9 +3,14 @@ package repository
 import (
 	"errors"
 	"fmt"
+
 	"wizegolangapi/domain/model"
 	"wizegolangapi/infraestructure/datastore"
 )
+
+const digimonColumnName = "Name"
+const digimonColumnLevel = "Level"
+const digimonColumnImage = "Image"
 
 type digimonRepository struct {
 	db datastore.CSVDB
@@ -42,20 +47,19 @@ func (dr *digimonRepository) FindAll(d []*model.Digimon) ([]*model.Digimon, erro
 		return nil, err
 	}
 	var labels []string
-	var digimonmap map[string]string
+	var digimonmap map[string]string = make(map[string]string)
 	for index, rec := range data {
 		if index == 0 {
 			labels = rec
-			digimonmap = make(map[string]string)
 			continue
 		}
 		for i, value := range rec {
 			digimonmap[labels[i]] = value
 		}
 		digimon := model.Digimon{
-			Name:  digimonmap["Name"],
-			Level: digimonmap["Level"],
-			Image: digimonmap["Image"]}
+			Name:  digimonmap[digimonColumnName],
+			Level: digimonmap[digimonColumnLevel],
+			Image: digimonmap[digimonColumnImage]}
 		d = append(d, &digimon)
 	}
 
@@ -167,22 +171,21 @@ func (dr *digimonRepository) Find(d *model.Digimon) (*model.Digimon, error) {
 	}
 
 	var digimon *model.Digimon
-	var digimonmap map[string]string
+	var digimonmap map[string]string = make(map[string]string)
 	var labels []string
 	for index, rec := range data {
 		if index == 0 {
 			labels = rec
-			digimonmap = make(map[string]string)
 			continue
 		}
 		for i, value := range rec {
 			digimonmap[labels[i]] = value
 		}
-		if digimonmap["Name"] == d.Name {
+		if digimonmap[digimonColumnName] == d.Name {
 			digimon = new(model.Digimon)
-			digimon.Name = digimonmap["Name"]
-			digimon.Level = digimonmap["Level"]
-			digimon.Image = digimonmap["Image"]
+			digimon.Name = digimonmap[digimonColumnName]
+			digimon.Level = digimonmap[digimonColumnLevel]
+			digimon.Image = digimonmap[digimonColumnImage]
 		}
 	}
 

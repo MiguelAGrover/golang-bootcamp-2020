@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// MyError : the structure that contain personalized error with information related to read and write to csvs
+// CSVDBError : the structure that contain personalized error with information related to read and write to csvs
 type CSVDBError struct {
 	When time.Time
 	What string
